@@ -6,6 +6,12 @@ from src.gui.geometry import GeometryBuilder
 from src.gui import screen
 from src.gui import styles
 from src.gui import widgets 
+from src.core import search_history
+
+
+
+
+
 
 class AppWindow(tk.Tk):
     def __init__(self):
@@ -71,7 +77,7 @@ class AppWindow(tk.Tk):
         self.autodecrypt_button = widgets.button(
             self.buttons_frame,
             text= "AutoDecrypt",
-            command = self.display_autodecrypt_input,
+            command =self.display_autodecrypt_input,
             width = 12
         )
         self.input_frame.pack(side = tk.LEFT)
@@ -82,8 +88,6 @@ class AppWindow(tk.Tk):
 
         self.output_label.pack(side = tk.TOP, pady = 5)
         self.output_text.pack(side = tk.BOTTOM)
-        
-
         self.data_frame.pack()
 
         self.key_frame.pack(pady = 10)
@@ -191,7 +195,29 @@ class AppWindow(tk.Tk):
         )
         self.help_text.pack()
         self.help_window.place_forget()
-
+        self.history_button = widgets.button(
+            self,
+            text="View Search History",
+            command=self.open_history_window,
+            width=20,
+        )
+        self.history_button.pack(pady=15)
+    def open_history_window(self):
+        history_window = tk.Toplevel(self)
+        history_window.title("Search History")
+        history_window.geometry("400x300")
+        history_window.configure(bg=styles.BACKGROUND_COLOR)
+        history_label = widgets.label(
+            history_window, text="Search History:", font=("Arial", 14, "bold")
+        )
+        history_label.pack(pady=10)
+        for item in search_history:
+            item_label = widgets.label(history_window, text=item)
+            item_label.pack(pady=2)
+        close_button = widgets.button(
+            history_window, text="Close", command=history_window.destroy, width=10
+        )
+        close_button.pack(pady=10)
     def get_input(self):
         return self.input_text.get("1.0", "end-1c")
 
